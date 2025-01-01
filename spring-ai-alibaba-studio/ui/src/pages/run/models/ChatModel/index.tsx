@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-import { useEffect, useState, useRef, memo } from 'react';
-import { Flex, Card, Button, Checkbox, Input, Spin, Image } from 'antd';
-import Setup from '../Setup';
-import { useParams } from 'ice';
+import { useEffect, useState, useRef, memo } from "react";
+import { Flex, Input, Spin } from "antd";
+import Setup from "@/components/Setup";
+import Chat from "@/components/Chat";
+import { useParams } from "ice";
 import {
   ChatModelData,
   ChatModelResultData,
-  ModelType,
-} from '@/types/chat_model';
-import chatModelsService from '@/services/chat_models';
-import { RightPanelValues } from '../types';
-import { RobotOutlined, UserOutlined } from '@ant-design/icons';
-import styles from './index.module.css';
-import { ChatOptions, ImageOptions } from '@/types/options';
+  ModelType
+} from "@/types/chat_model";
+import chatModelsService from "@/services/chat_models";
+import { RightPanelValues } from "../types";
+import { RobotOutlined, UserOutlined } from "@ant-design/icons";
+import styles from "./index.module.css";
+import { ChatOptions, ImageOptions } from "@/types/options";
 
 type Props = {
   modelData: ChatModelData;
@@ -45,7 +46,7 @@ const ChatModel = memo((props: Props) => {
 
   const [initialValues, setInitialValues] = useState<RightPanelValues>({
     initialChatConfig: {
-      model: 'qwen-plus',
+      model: "qwen-plus",
       temperature: 0.85,
       top_p: 0.8,
       seed: 1,
@@ -54,26 +55,26 @@ const ChatModel = memo((props: Props) => {
       stop: [],
       incremental_output: false,
       repetition_penalty: 1.1,
-      tools: [],
+      tools: []
     },
     initialImgConfig: {
-      model: 'wanx-v1',
-      responseFormat: '',
+      model: "wanx-v1",
+      responseFormat: "",
       n: 1,
-      size: '1024*1024',
-      style: '<auto>',
+      size: "1024*1024",
+      style: "<auto>",
       seed: 0,
-      ref_img: '',
+      ref_img: "",
       ref_strength: 0,
-      ref_mode: '',
-      negative_prompt: '',
+      ref_mode: "",
+      negative_prompt: ""
     },
-    initialTool: {},
+    initialTool: {}
   });
   const [modelOptions, setModelOptions] = useState<
     ChatOptions | ImageOptions
   >();
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
 
   // 当 modelData.chatOptions 发生变化时同步更新 initialValues
   useEffect(() => {
@@ -87,7 +88,7 @@ const ChatModel = memo((props: Props) => {
     setInitialValues((prev) => ({
       initialChatConfig: { ...modelData.chatOptions },
       initialImgConfig: { ...modelData.imageOptions },
-      initialTool: {},
+      initialTool: {}
     }));
     if (modelData.modelType == ModelType.CHAT) {
       setModelOptions(modelData.chatOptions);
@@ -96,7 +97,7 @@ const ChatModel = memo((props: Props) => {
     }
   }, [modelData]);
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [isStream, setIsStream] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -110,7 +111,7 @@ const ChatModel = memo((props: Props) => {
   };
 
   const [messages, setMessages] = useState(
-    [] as Array<{ type: string; content: JSX.Element | string }>,
+    [] as Array<{ type: string; content: JSX.Element | string }>
   );
 
   const handleOptions = (options: ChatOptions | ImageOptions) => {
@@ -124,17 +125,17 @@ const ChatModel = memo((props: Props) => {
   const runModel = async () => {
     try {
       setDisabled(true);
-      setInputValue('');
+      setInputValue("");
       setMessages([
         ...messages,
         {
-          type: 'user',
-          content: inputValue,
+          type: "user",
+          content: inputValue
         },
         {
-          type: 'model',
-          content: loading(),
-        },
+          type: "model",
+          content: loading()
+        }
       ]);
 
       let res: ChatModelResultData | undefined;
@@ -144,31 +145,31 @@ const ChatModel = memo((props: Props) => {
           chatOptions: modelOptions,
           stream: isStream,
           key: modelData.name,
-          prompt: prompt,
+          prompt: prompt
         })) as ChatModelResultData;
       } else if (modelType === ModelType.IMAGE) {
         res = (await chatModelsService.postImageModel({
           input: inputValue,
           imageOptions: modelOptions,
-          key: modelData.name,
+          key: modelData.name
         })) as ChatModelResultData;
       }
 
       setMessages([
         ...messages,
         {
-          type: 'user',
-          content: inputValue,
+          type: "user",
+          content: inputValue
         },
         {
-          type: modelType === ModelType.CHAT ? 'chatModel' : 'imageModel',
-          content: res ? res.result.response : '请求失败，请重试',
-        },
+          type: modelType === ModelType.CHAT ? "chatModel" : "imageModel",
+          content: res ? res.result.response : "请求失败，请重试"
+        }
       ]);
       setDisabled(false);
     } catch (error) {
       setDisabled(false);
-      console.error('Failed to fetch chat models: ', error);
+      console.error("Failed to fetch chat models: ", error);
     }
   };
 
@@ -177,7 +178,7 @@ const ChatModel = memo((props: Props) => {
   const loading = () => {
     return (
       <Spin tip="Loading">
-        <div className={styles['message-loading']} />
+        <div className={styles["message-loading"]} />
       </Spin>
     );
   };
@@ -188,7 +189,7 @@ const ChatModel = memo((props: Props) => {
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -196,74 +197,47 @@ const ChatModel = memo((props: Props) => {
     scrollToBottom();
   }, [messages]);
 
+  const setupValue = [
+    {
+      tabName: "config",
+      tabType: [
+        {
+          type: "select",
+          options: [
+            { value: "qwen-plus", label: "qwen-plus" },
+            { value: "wanx-v1", label: "wanx-v1" }
+          ] as SelectProps["options"]
+        },
+        {
+          type: "InputNumber"
+        }
+      ],
+      tabValue: []
+    },
+    {
+      tabName: "prompt",
+      tabType: [
+        {
+          type: "textArea"
+        }
+      ],
+      tabValue: []
+    },
+    {
+      tabName: "tool",
+      tabType: [],
+      tabValue: []
+    }
+  ];
+
   return (
-    <Flex justify="space-between" style={{ height: '100%' }}>
-      <Flex vertical style={{ marginRight: 20, flexGrow: 1, height: '100%' }}>
-        <div className={styles['message-wrapper']}>
-          {messages.map((message: any, index) => {
-            return (
-              <Flex
-                key={index}
-                className={styles['message']}
-                style={{
-                  alignSelf: message.type === 'user' ? 'end' : 'auto',
-                }}
-                ref={index === messages.length - 1 ? messagesEndRef : undefined}
-              >
-                {message.type !== 'user' && (
-                  <RobotOutlined className={styles['message-icon']} />
-                )}
-                <Card
-                  style={{
-                    marginLeft: message.type === 'user' ? 0 : 10,
-                    marginRight: message.type === 'user' ? 10 : 0,
-                  }}
-                >
-                  {message.type !== 'imageModel' && (
-                    <div>{message.content}</div>
-                  )}
-                  {message.type === 'imageModel' && (
-                    <Flex align="flex-end">
-                      <Image width={200} src={message.content} />
-                      <Button type="primary" style={{ marginLeft: 10 }}>
-                        下载
-                      </Button>
-                    </Flex>
-                  )}
-                </Card>
-                {message.type === 'user' && (
-                  <UserOutlined className={styles['message-icon']} />
-                )}
-              </Flex>
-            );
-          })}
-        </div>
-        <Flex vertical>
-          <TextArea
-            autoSize={{ minRows: 3 }}
-            style={{ marginBottom: 20 }}
-            value={inputValue}
-            onChange={handleInputChange}
-          />
-          <Flex style={{ flexDirection: 'row-reverse' }}>
-            <Flex style={{ width: 300 }} align="center" justify="space-around">
-              <Button onClick={cleanHistory}>清空</Button>
-              <Checkbox checked={isStream} onChange={handleStreamChange}>
-                流式响应
-              </Checkbox>
-              <Button onClick={runModel} disabled={disabled}>
-                运行
-              </Button>
-            </Flex>
-          </Flex>
-        </Flex>
-      </Flex>
-      <Setup
-        modelType={modelData.modelType}
-        initialValues={initialValues}
-        onChangeConfig={handleOptions}
-        onChangePrompt={handlePrompt}
+    <Flex justify="space-between" style={{ height: "100%" }}>
+      <Chat
+        modelData={modelData}
+        modelType={modelType}
+        modelOptions={initialValues}
       />
+      <Setup setupValue={setupValue} />
     </Flex>
   );
 });

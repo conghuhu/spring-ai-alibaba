@@ -22,10 +22,10 @@ import {
   Flex,
   InputNumber,
   Button,
-  Switch
-} from "antd";
-import { TabValue, TabType, ItemType } from "../types";
-import { useEffect } from "react";
+  Switch,
+} from 'antd';
+import { TabValue, TabType, ItemType } from '../types';
+import { useEffect } from 'react';
 
 type Props = {
   tabValue: TabValue;
@@ -40,17 +40,17 @@ export default function Config(props: Props) {
   const { TextArea } = Input;
   const makeFromItem = (item: ItemType) => {
     switch (item.type) {
-      case "select":
+      case 'select':
         return <Select options={item.optinos} />;
-      case "slider":
+      case 'slider':
         return <Slider max={item.max} min={item.min} step={item.step} />;
-      case "inputNumber":
+      case 'inputNumber':
         return <InputNumber min={item.min} max={item.max} />;
-      case "switch":
+      case 'switch':
         return <Switch />;
-      case "input":
+      case 'input':
         return <Input placeholder={item.placeholder} />;
-      case "textarea":
+      case 'textarea':
         return <TextArea rows={3} />;
       default:
         return <></>;

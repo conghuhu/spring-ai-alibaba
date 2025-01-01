@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { Tabs } from "antd";
-import type { TabsProps, SelectProps } from "antd";
-import styles from "./index.module.css";
-import { SetupValue } from "./types";
-import TabMenu from "./TabMenu";
+import { Tabs } from 'antd';
+import type { TabsProps } from 'antd';
+import styles from './index.module.css';
+import { SetupValue } from './types';
+import TabMenu from './TabMenu';
 
 type Props = {
   setupValue: SetupValue;
@@ -26,43 +26,10 @@ type Props = {
 };
 
 export default function Setup(props: Props) {
-  // const { setupValue } = props;
+  const { setupValue } = props;
   const { onChange } = props;
 
-  const setupValue = [
-    {
-      tabName: "config",
-      tabType: [
-        {
-          type: "select",
-          options: [
-            { value: "qwen-plus", label: "qwen-plus" },
-            { value: "wanx-v1", label: "wanx-v1" }
-          ] as SelectProps["options"]
-        },
-        {
-          type: "InputNumber"
-        }
-      ],
-      tabValue: []
-    },
-    {
-      tabName: "prompt",
-      tabType: [
-        {
-          type: "textArea"
-        }
-      ],
-      tabValue: []
-    },
-    {
-      tabName: "tool",
-      tabType: [],
-      tabValue: []
-    }
-  ];
-
-  const tabItems: TabsProps["items"] = setupValue.map((item) => {
+  const tabItems: TabsProps['items'] = setupValue.map((item) => {
     return {
       key: item.tabName,
       label: item.tabName,
@@ -72,7 +39,7 @@ export default function Setup(props: Props) {
           tabValue={item.tabValue}
           onChange={onChange}
         />
-      )
+      ),
     };
   });
 

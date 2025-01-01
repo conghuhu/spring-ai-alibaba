@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-export type TabName = 'config' | 'prompt' | 'tool';
-export type ItemType = {
-  type: 'select' | 'textarea';
-  [key: string]: any;
-};
-export type TabType = Array<ItemType>;
+export type TabType = Array<any>;
 export type TabValue = any[];
 
 export type SetupValue = Array<{
-  tabName: TabName;
+  tabName: string;
   tabType: TabType;
   tabValue: TabValue;
 }>;
