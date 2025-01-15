@@ -16,9 +16,24 @@
 
 package com.alibaba.cloud.ai.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
+import java.util.Map;
 
 @Data
 public class FunctionCalling {
+
+	@Schema(description = "The name of the application associated with the function.")
+	private String applicationName;
+
+	@Schema(description = "The description of the function.")
+	private String description;
+
+	@Schema(description = "The input parameters for the function.")
+	private Map<String, String> inputParameters;
+
+	@Schema(description = "The output parameters or response of the function.")
+	private Map<String, String> outputParameters;
 
 }
