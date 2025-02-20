@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.Optional.ofNullable;
 
-@Service
+//@Service
 @Slf4j
 public class GraphServiceImpl implements GraphService {
 

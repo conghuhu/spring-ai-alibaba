@@ -47,7 +47,7 @@ public class GraphAutoConfiguration {
 	// return new GraphInitData(title, graph.getContent(), inputArgs);
 	// }
 
-	@Bean
+//	@Bean
 	public GraphInitData initData(StateGraph stateGraph) throws GraphStateException {
 		String title = "Agent Executor";
 		String name = "input";

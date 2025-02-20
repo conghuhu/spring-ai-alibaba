@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
-@RestController
-@RequestMapping("studio/api/graph")
+//@RestController
+//@RequestMapping("studio/api/graph")
 public class GraphAPIController implements GraphAPI {
 
 	private final GraphService graphService;
