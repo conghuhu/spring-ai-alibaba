@@ -215,6 +215,19 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/RString"
+  /studio/api/function-calling:
+    get:
+      tags:
+      - function-calling
+      summary: list all registered functions
+      operationId: listAllFunctionCallings
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RListFunctionCalling"
   /studio/api/chat-models/{modelName}:
     get:
       tags:
@@ -276,6 +289,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RChatClient"
+  /ai/weather-service:
+    get:
+      tags:
+      - chat-controller
+      operationId: weatherService
+      parameters:
+      - name: subject
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
   /ai/stream:
     get:
       tags:
@@ -406,6 +437,8 @@ components:
             type: object
         enable_search:
           type: boolean
+        response_format:
+          $ref: "#/components/schemas/DashScopeResponseFormat"
         incremental_output:
           type: boolean
         repetition_penalty:
@@ -457,6 +490,14 @@ components:
           type: string
       description: image model config
       nullable: true
+    DashScopeResponseFormat:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - text
+          - json_object
     Function:
       type: object
       properties:
@@ -636,6 +677,44 @@ components:
           format: int64
         requestId:
           type: string
+    FunctionCalling:
+      type: object
+      properties:
+        applicationName:
+          type: string
+          description: The name of the application associated with the function.
+        description:
+          type: string
+          description: The description of the function.
+        inputParameters:
+          type: object
+          additionalProperties:
+            type: string
+            description: The input parameters for the function.
+          description: The input parameters for the function.
+        outputParameters:
+          type: object
+          additionalProperties:
+            type: string
+            description: The output parameters or response of the function.
+          description: The output parameters or response of the function.
+    RListFunctionCalling:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        msg:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/FunctionCalling"
+        timestamp:
+          type: integer
+          format: int64
+        requestId:
+          type: string
     ChatModel:
       type: object
       properties:
@@ -740,6 +819,14 @@ components:
     ChatOptions:
       type: object
       properties:
+        topP:
+          type: number
+          format: double
+        topK:
+          type: integer
+          format: int32
+        model:
+          type: string
         maxTokens:
           type: integer
           format: int32
@@ -756,14 +843,6 @@ components:
           type: array
           items:
             type: string
-        topP:
-          type: number
-          format: double
-        topK:
-          type: integer
-          format: int32
-        model:
-          type: string
     RListChatClient:
       type: object
       properties:
